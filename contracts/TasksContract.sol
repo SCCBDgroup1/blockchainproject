@@ -58,7 +58,7 @@ contract TasksContract {
     }
 
     //CRUD updateTask
-    function toogleDone(uint256 _id) public {
+    function toggleDone(uint _id) public {
         //type of data, memory and variable
         Task memory _task = tasks[_id];
         _task.done = !_task.done;

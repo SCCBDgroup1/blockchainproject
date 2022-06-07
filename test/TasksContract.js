@@ -42,6 +42,7 @@ contract("TasksContract", () =>{
     it('create task successfully', async () => {
         //create a new task
         const result = await this.tasksContract.createTask("entrada J1-FCB-Espanyol", "Puerta 31-Fila 3-Asiento 9");
+        //remember that result.logs[0].args is the result of the event
         const taskEvent = result.logs[0].args;
         const taskCounter = await this.tasksContract.taskCounter();
 
@@ -52,6 +53,20 @@ contract("TasksContract", () =>{
         assert.equal(taskEvent.name, "entrada J1-FCB-Espanyol");
         assert.equal(taskEvent.description, "Puerta 31-Fila 3-Asiento 9");
         assert.equal(taskEvent.done, false);
+    })
+
+    it('task toggle done', async()=>{
+        //we change the status or property done of the firs task, false to true
+        const result = await this.tasksContract.toggleDone(1);
+        //remember that result.logs[0].args is the result of x object where we change status of task 
+        const taskEvent = result.logs[0].args;
+        //finally from to the list of tasks, we get the task with id=1
+        const task = await this.tasksContract.tasks(1);
+
+        //assert the values
+        assert.equal(task.done, true);
+        assert.equal(taskEvent.done, true);
+        assert.equal(taskEvent.id, 1);
     })
 
 })
